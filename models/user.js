@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema({
     image : {
         type : String,
         required : true
+    },
+
+    whtassApp : {
+        type : String,
+        required : true
     }
 
 });
