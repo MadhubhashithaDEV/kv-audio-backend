@@ -19,11 +19,11 @@ app.use((req,res,next)=>{
   ("Authorization")
 
 
-
+// crate a token and authentication
   if(token!=null){
     token =token.replace("Bearer ","");
 
-    jwd.verify(token,"kv-secret-89!",(err,decoded)=>{
+    jwd.verify(token,process.env.JWT_SECRET,(err,decoded)=>{
 
       if(!err){
         req.user = decoded;
@@ -47,8 +47,8 @@ connection.once("open",()=>{
     console.log("MongoDB connection established successfully")
 })
 
-app.use("/api/users",userRouter)
-app.use("api/products",productRouter)
+app.use("/api/users",userRouter);
+app.use("api/products",productRouter);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
