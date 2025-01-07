@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+
+//create json arry for save the user details  data to mongo db
+
 const userSchema = new mongoose.Schema({
 
     email : {
@@ -38,9 +41,11 @@ const userSchema = new mongoose.Schema({
         required : true
     },
 
-    image : {
+    profilePicture : {
         type : String,
-        required : true
+        required : true,
+        default: "https://cdn-icons-png.flaticon.com/512/149/149071.pnghttps://www.kindpng.com/imgv/iwoxbb_user-profile-default-image-png-clipart-png-download/"
+
     }
 
 });

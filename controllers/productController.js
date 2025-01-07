@@ -1,5 +1,7 @@
 import Product from "../models/product.js";
 
+// add products
+
 export function addProduct(req,res){
 
     console.log(req.user)
@@ -20,8 +22,9 @@ export function addProduct(req,res){
 
     const data = req.body;
     const newProduct= new Product(data);
-    newProduct.save()
-    .then(()=>{
+
+    
+    newProduct.save().then(()=>{
      
         res.json({message:"Product added successfully"});
 

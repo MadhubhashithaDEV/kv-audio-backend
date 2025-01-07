@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+//user registration 
+
 export function registerUser(req, res) {
   const data = req.body;
 
@@ -21,6 +23,8 @@ export function registerUser(req, res) {
       res.status(500).json({ error: "User registration failed" });
     });
 }
+
+//user login
 
 export function loginUser(req, res) {
   const data = req.body;
@@ -41,7 +45,9 @@ export function loginUser(req, res) {
           firstName : user.firstName,
           lastName :user.lastName,
           email : user.email,
-          role : user.role
+          role : user.role,
+          pofilePic : user.profilePic
+
         },process.env.JWT_SECRET);
 
         res.json({ message: "Login successful",token : token });

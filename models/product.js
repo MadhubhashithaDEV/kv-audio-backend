@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//create json arry for save the product details data to mongo db
+
 const productSchema = new mongoose.Schema({
     name :{
         type : String,
