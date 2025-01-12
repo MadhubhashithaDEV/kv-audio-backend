@@ -28,21 +28,22 @@ export function addReview(req,res){
 
 //get coustomer reviews
 
-export function getReviews(req,res){
+export async function getReviews(req,res){
    
     const user = req.user;
-    if(user==null || user.role != "admin"){
-        Review.find({isApproverd:true}).then((reviews)=>{  
-            res.json(reviews); 
-        })
-        return
+    try{
+        const reviews = await Review.find();
+        res.json(reviews);
+
+    }catch(e){
+        res.status(500).json({error:"Review retrieval failed"});
     }
-    if(user.role=="admin"){
-        Review.find({}).then((reviews)=>{
-            res.json(reviews);
-        })    
+
+
+
+    
     }   
-}
+
 
 
 //delete coustomer reviews

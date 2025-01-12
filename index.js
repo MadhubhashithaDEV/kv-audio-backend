@@ -8,8 +8,7 @@ import dotenv from "dotenv";
 import reviewRouter from "./routes/reviewRouter.js";
 
 dotenv.config();
-
-let app = express();
+const app = express();
 
 
 
