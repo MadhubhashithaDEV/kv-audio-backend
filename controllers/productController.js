@@ -82,7 +82,7 @@ export async function updateProduct(req,res){
     }
 }
 
-//delete products
+//delete products 
 
 export async function deleteProduct(req,res){
     try{
