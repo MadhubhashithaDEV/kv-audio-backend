@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
+
 dotenv.config();
 
 //user registration 
@@ -45,7 +46,8 @@ export function loginUser(req, res) {
           lastName :user.lastName,
           email : user.email,
           role : user.role,
-          pofilePic : user.profilePic
+          pofilePic : user.profilePic,
+          phone:user.phone,
 
         },process.env.JWT_SECRET);
 
@@ -56,4 +58,30 @@ export function loginUser(req, res) {
     }
   });
 
+}
+
+export function isItAdmin(req){
+
+  let isAdmin = false;
+  if(req.user!=null){
+      if(req.user.role == "admin"){
+          isAdmin = true;
+      }
+  }
+  
+ return isAdmin;
+}
+
+export function isItCustomer(req){
+  let isCoustomer = false;
+
+  if(req.user !=null){
+    if(req.user.role == "customer"){
+
+      isCoustomer = true;
+    }
+      
+  }
+
+  return isCoustomer;
 }

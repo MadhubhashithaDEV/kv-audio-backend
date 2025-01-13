@@ -16,7 +16,7 @@ export function addReview(req,res){
     data.profilePicture = req.user.profilePicture;
     data.email = req.user.email;
 
-
+ 
 
     const newReview = new Review(data)
     newReview.save().then(()=>{
@@ -38,8 +38,6 @@ export async function getReviews(req,res){
     }catch(e){
         res.status(500).json({error:"Review retrieval failed"});
     }
-
-
 
     
     }   
