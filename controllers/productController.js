@@ -21,7 +21,7 @@ export function addProduct(req,res){
 
     const data = req.body;
     const newProduct= new Product(data);
-
+    console.log(newProduct);
     
     newProduct.save().then(()=>{
      
@@ -29,14 +29,16 @@ export function addProduct(req,res){
 
     })
     .catch((error)=>{
-
+    console.log(error)
         res.status(500).json({error: "product addition failed"});
     });
 }
 
+
 //get all products
 //only admin can get avilable and unavilable products,
 //coustomers can't get unavilabe products but customer can get avilable products 🛠️  
+
 
 export async function getProducts(req,res){
 
@@ -70,14 +72,16 @@ export async function updateProduct(req,res){
             await Product.updateOne({key:key},data);  
             
             res.json({message:"product updated successfully"});
+           
 
         }else{
-            res.status(500).json({message : "you are not authorized to perform this action"});
+            res.status(401).json({message : "you are not authorized to perform this action"});
         }
 
 
 
     }catch(e){
+        
         res.status(500).json({error:"failed to update product"});
     }
 }
@@ -104,3 +108,21 @@ export async function deleteProduct(req,res){
 }
 
 
+export async function getProduct(req,res){
+    try{
+      const key = req.params.key;
+      const product = await Product.findOne({key:key})
+      if(product == null){
+        res.status(404).json({
+          message : "Product not found"
+        })
+        return;
+      }
+      res.json(product)
+      return;
+    }catch(e){
+      res.status(500).json({
+        message : "Failed to get product"
+      })
+    }
+  }

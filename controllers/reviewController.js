@@ -46,7 +46,6 @@ export async function getReviews(req,res){
 
 //delete coustomer reviews
 
-
 export function deleteReview(req,res){
     const email = req.params.email;
 
