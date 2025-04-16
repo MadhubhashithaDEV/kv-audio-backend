@@ -34,7 +34,7 @@ const productSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-
+    
     avilability :{
         type : Boolean,
         required : true,

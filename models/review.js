@@ -39,7 +39,6 @@ const reviewSchema = new mongoose.Schema({
 
     profilePicture : {
         type : String,
-        required : true,
         default: "https://cdn-icons-png.flaticon.com/512/149/149071.pnghttps://www.kindpng.com/imgv/iwoxbb_user-profile-default-image-png-clipart-png-download/"
 
     }

@@ -3,8 +3,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import axios from "axios";
+import nodemailer from "nodemailer";
+import OTP from "../models/otp.js";
 
 dotenv.config();
+
+const transport = nodemailer.createTransport({
+	service: "gmail",
+	host: "smtp.gmail.com",
+	port: 587,
+	secure: false,
+	auth: {
+	  user: "akilahub@gmail.com",
+	  pass: "tbfyohqltesphhgt",
+	}
+    })
 
 //user registration 
 
@@ -55,7 +68,7 @@ export function loginUser(req, res) {
 						role: user.role,
 						profilePicture: user.profilePicture,
 						phone: user.phone,
-            emailVerified: user.emailVerified
+                                    emailVerified: user.emailVerified
 					},
 					process.env.JWT_SECRET
 				);
@@ -181,7 +194,7 @@ export async function loginWithGoogle(req, res) {
 					role: user.role,
 					profilePicture: user.profilePicture,
 					phone: user.phone,
-          emailVerified: true
+                              emailVerified: true
 				},
 				process.env.JWT_SECRET
 			);
@@ -217,3 +230,73 @@ export async function loginWithGoogle(req, res) {
 		res.status(500).json({ error: "Failed to login with google" });
 	}
 }
+
+//OTP verification
+
+export async function sendOTP(req,res){
+   
+
+	if(req.user == null){
+	  res.status(403).json({error : "Unauthorized"})
+	  return;
+	}
+	//generate number between 1000 and 9999
+	const otp = Math.floor(Math.random()*9000) + 1000;
+	//save otp in database
+	const newOTP = new OTP({
+	  email : req.user.email,
+	  otp : otp
+	})
+	await newOTP.save();
+	
+	const message = {
+	  from : "akilahub@gmail.com",
+	  to : req.user.email,
+	  subject : "Validating OTP",
+	  text : "Your otp code is "+otp
+	}
+    
+	transport.sendMail(message, (err, info) => {
+	  if(err){
+	    console.log(err); 
+	    res.status(500).json({error : "Failed to send OTP"})    
+	  }else{
+	    console.log(info)
+	    res.json({message : "OTP sent successfully"})
+	  }
+	});
+    
+    }
+
+    //verify otp
+    export async function verifyOTP(req,res){
+	if(req.user == null){
+	  res.status(403).json({error : "Unauthorized"})
+	  return;
+	}
+	const code = req.body.code;
+    
+	const otp = await OTP.findOne({
+	  email : req.user.email,
+	  otp : code
+	})
+    
+	if(otp == null){
+	  res.status(404).json({error : "Invalid OTP"})
+	  return;
+	}else{
+	  await OTP.deleteOne({
+	    email : req.user.email,
+	    otp : code
+	  })
+    
+	  await User.updateOne({
+	    email : req.user.email
+	  },{
+	    emailVerified : true
+	  })
+    
+	  res.status(200).json({message : "Email verified successfully"})
+	}
+	
+    }
